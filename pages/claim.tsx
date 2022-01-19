@@ -6,12 +6,14 @@ import { useGeneral } from '@/context/general.context';
 import { useEffect } from 'react';
 
 export default function GIVdropRoute() {
-	const { setShowHeader } = useGeneral();
+	const { setShowHeader, setShowFooter } = useGeneral();
 
 	useEffect(() => {
 		setShowHeader(false);
+		setShowFooter(false);
 		return () => {
 			setShowHeader(true);
+			setShowFooter(true);
 		};
 	}, [setShowHeader]);
 
