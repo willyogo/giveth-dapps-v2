@@ -15,7 +15,7 @@ export default function GIVdropRoute() {
 			setShowHeader(true);
 			setShowFooter(true);
 		};
-	}, [setShowHeader]);
+	}, [setShowFooter, setShowHeader]);
 
 	return (
 		<>
