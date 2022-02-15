@@ -151,8 +151,8 @@ const DonationTable: FC<DonationTable> = ({
 						<IconArrowTop size={16} />
 					))}
 			</TabelHeader>
-			{donations.map(donation => (
-				<>
+			{donations.map((donation, idx) => (
+				<RowWrapper key={idx}>
 					<TabelCell>
 						<P>{smallFormatDate(new Date(donation.createdAt))}</P>
 					</TabelCell>
@@ -165,7 +165,7 @@ const DonationTable: FC<DonationTable> = ({
 					<TabelCell>
 						<P>{donation.amount}</P>
 					</TabelCell>
-				</>
+				</RowWrapper>
 			))}
 		</DonationTablecontainer>
 	);
@@ -214,4 +214,8 @@ const Loading = styled(Row)`
 
 const DonationTableWrapper = styled.div`
 	position: relative;
+`;
+
+const RowWrapper = styled.div`
+	display: contents;
 `;
