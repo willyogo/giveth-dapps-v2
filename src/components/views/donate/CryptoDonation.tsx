@@ -469,15 +469,17 @@ const CryptoDonation = (props: {
 					/>
 				</ToastContainer>
 			) : (
-				<ToastContainer>
-					<FixedToast
-						message='This token is eligible for GIVbacks.'
-						color={brandColors.giv[300]}
-						boldColor={brandColors.giv[600]}
-						backgroundColor={brandColors.giv[100]}
-						href={Routes.GIVbacks}
-					/>
-				</ToastContainer>
+				givBackEligible && (
+					<ToastContainer>
+						<FixedToast
+							message='This token is eligible for GIVbacks.'
+							color={brandColors.giv[300]}
+							boldColor={brandColors.giv[600]}
+							backgroundColor={brandColors.giv[100]}
+							href={Routes.GIVbacks}
+						/>
+					</ToastContainer>
+				)
 			)}
 			<CheckBoxContainer>
 				<CheckBox
