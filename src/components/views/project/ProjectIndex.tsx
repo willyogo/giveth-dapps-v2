@@ -119,10 +119,13 @@ const ProjectIndex = () => {
 			/>
 		);
 	}
+
 	return (
 		<Wrapper>
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
+				<meta name='title' content={`${title} | Giveth`} />
+				<meta name='description' content={''}></meta>
 			</Head>
 			<ProjectHeader project={project} />
 			{isDraft && (
