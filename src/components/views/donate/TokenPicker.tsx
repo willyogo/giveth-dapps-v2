@@ -55,12 +55,18 @@ const ImageIcon = (props: { symbol: string }) => {
 };
 
 const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
+	const projectVerified = props.selectProps.projectVerified;
 	return (
 		<components.MenuList {...props}>
-			<GivBackIconContainer>
-				<Image alt='givback eligible icon' src={GivbackEligibleIcon} />
-				<Caption>GIVbacks eligible tokens</Caption>
-			</GivBackIconContainer>
+			{projectVerified && (
+				<GivBackIconContainer>
+					<Image
+						alt='givback eligible icon'
+						src={GivbackEligibleIcon}
+					/>
+					<Caption>GIVbacks eligible tokens</Caption>
+				</GivBackIconContainer>
+			)}
 			{props.children}
 		</components.MenuList>
 	);
