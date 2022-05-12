@@ -19,7 +19,7 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
-import { store } from '@/stores/store';
+import { store } from '@/features/store';
 import { SubgraphProvider } from '@/context/subgraph.context';
 import type { AppProps } from 'next/app';
 

@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { gToast, ToastType } from '@/components/toasts';
-import { useGetSubgraphValuesQuery } from '@/stores/subgraph-api-slice';
+import { useGetSubgraphValuesQuery } from '@/features/subgraph/subgraph-api-slice';
 // import { RootState } from '@/stores/store';
 
 const TestRoute = () => {

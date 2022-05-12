@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { subgraphApiSlice } from './subgraph-api-slice';
+import { subgraphApiSlice } from './subgraph/subgraph-api-slice';
 // import subgraphReducer from './subgraph.store';
 
 export const store = configureStore({
