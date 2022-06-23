@@ -106,7 +106,7 @@ const config: EnvConfig = {
 		MERKLE_ADDRESS: '0x06BA4122FC4F3AbCdAFD2fF1dD83A88A63842309',
 		TOKEN_DISTRO_ADDRESS: '0x74B557bec1A496a8E9BE57e9A1530A15364C87Be',
 
-		nodeUrl: 'https://rpc.xdaichain.com/',
+		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
 			LM_ADDRESS: '0x1460aaF51F4E0B1b59Bb41981Cb4aa5A1B377776',
