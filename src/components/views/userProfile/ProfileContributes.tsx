@@ -84,7 +84,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<Link href={pathname + profileTabs.projects}>
 					<a>
 						<ProfileTab active={tab === EProfile.PROJECTS}>
-							{`${myAccount ? 'My ' : userName + '’s'} Projects`}
+							{`${myAccount ? 'My ' : ''} Projects`}
 							{myAccount && user?.projectsCount != 0 && (
 								<Count active={tab === EProfile.PROJECTS}>
 									{user?.projectsCount}
