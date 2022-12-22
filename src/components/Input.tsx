@@ -44,7 +44,6 @@ interface IInputLabelProps {
 	required?: boolean;
 	disabled?: boolean;
 }
-
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
 	label?: string;
 	caption?: string;
