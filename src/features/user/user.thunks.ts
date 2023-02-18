@@ -1,4 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { keccak256 } from '@ethersproject/keccak256';
+import { toUtf8Bytes } from '@ethersproject/strings';
+import SafeAppsSDK from '@safe-global/safe-apps-sdk';
 import { Contract } from '@ethersproject/contracts';
 import { backendGQLRequest } from '@/helpers/requests';
 import { postRequest } from '@/helpers/requests';
@@ -44,9 +47,22 @@ export const signToGetToken = createAsyncThunk(
 			let safeSignature;
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
-			if (safeWallet) {
-				await activate(safeWallet.connector, console.log)
-					.then(() => {})
+			let isSafeEnvironment;
+			//TODO Move this somewhere else <<<<<<<<<<<<<<
+			const gnosisSdk = new SafeAppsSDK();
+
+			const maxTime = new Promise((resolve, reject) => {
+				setTimeout(() => {
+					resolve(false);
+				}, 1000);
+			});
+			const safeInfo = gnosisSdk.safe.getInfo();
+			isSafeEnvironment = await Promise.race([safeInfo, maxTime]);
+			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+			if (isSafeEnvironment) {
+				await activate(safeWallet?.connector, () => {})
+					.then()
 					.finally(async () => {
 						const gnosisSafeContract = new Contract(
 							address,
@@ -60,20 +76,21 @@ export const signToGetToken = createAsyncThunk(
 									'SignMsg',
 									async msgHash => {
 										// Upon detecting the SignMsg event, validate that the contract signed the message
-
+										console.log('>>', { msgHash });
 										// TODO: let's validate the signature is the right one
-										// const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE = '0x1626ba7e';
-										// const magicValue =
-										// 	await gnosisSafeContract.isValidSignature(
-										// 		keccak256(toUtf8Bytes(message)),
-										// 		'0x',
-										// 	);
-										// const messageWasSigned =
-										// 	magicValue ===
-										// 	GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
-										const messageWasSigned = true;
+										const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE =
+											'0x1626ba7e';
+										const magicValue =
+											await gnosisSafeContract.isValidSignature(
+												keccak256(toUtf8Bytes(message)),
+												'0x',
+											);
+										const messageWasSigned =
+											magicValue ===
+											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
 										console.log({
 											messageWasSigned,
+											msgHash,
 										});
 										resolve(msgHash);
 									},
@@ -84,8 +101,8 @@ export const signToGetToken = createAsyncThunk(
 						safeSignature = await listenToGnosisSafeContract;
 					});
 			}
-			if (safeSignature) signature = safeSignature;
-			console.log({ safeSignature, signature });
+			// if (safeSignature) signature = safeSignature;
+			// console.log({ safeSignature, signature });
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
