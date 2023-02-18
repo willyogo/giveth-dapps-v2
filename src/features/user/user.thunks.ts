@@ -78,21 +78,21 @@ export const signToGetToken = createAsyncThunk(
 										// Upon detecting the SignMsg event, validate that the contract signed the message
 										console.log('>>', { msgHash });
 										// TODO: let's validate the signature is the right one
-										const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE =
-											'0x1626ba7e';
-										const magicValue =
-											await gnosisSafeContract.checkSignatures(
-												keccak256(toUtf8Bytes(message)),
-												message,
-												msgHash,
-											);
-										const messageWasSigned =
-											magicValue ===
-											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
-										console.log({
-											messageWasSigned,
-											msgHash,
-										});
+										// const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE =
+										// 	'0x1626ba7e';
+										// const magicValue =
+										// 	await gnosisSafeContract.checkSignatures(
+										// 		keccak256(toUtf8Bytes(message)),
+										// 		message,
+										// 		msgHash,
+										// 	);
+										// const messageWasSigned =
+										// 	magicValue ===
+										// 	GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
+										// console.log({
+										// 	messageWasSigned,
+										// 	msgHash,
+										// });
 										resolve(msgHash);
 									},
 								);
