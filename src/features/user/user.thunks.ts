@@ -41,15 +41,13 @@ export const signToGetToken = createAsyncThunk(
 			);
 			const { nonce, message } = siweMessage;
 			const signature = await signer.signMessage(message);
-			let safeSignature = null;
+			let safeSignature;
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
-			if (safeWallet?.connector) {
-				try {
-					// makes signature as a multisig
-					safeSignature = await activate(safeWallet.connector, () => {
-						return false;
-					}).then(async () => {
+			if (safeWallet) {
+				activate(safeWallet.connector, console.log)
+					.then(() => {})
+					.finally(async () => {
 						const gnosisSafeContract = new Contract(
 							address,
 							GNOSIS_SAFE_CONTRACT_ABI,
@@ -83,12 +81,10 @@ export const signToGetToken = createAsyncThunk(
 							},
 						);
 						// start listening
-						return await listenToGnosisSafeContract;
+						safeSignature = await listenToGnosisSafeContract;
 					});
-				} catch (error) {
-					console.log('not a gnosis safe env');
-				}
 			}
+
 			console.log({ safeSignature, signature });
 			if (signature) {
 				const state = getState() as RootState;
