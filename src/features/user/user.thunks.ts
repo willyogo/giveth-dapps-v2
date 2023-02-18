@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { keccak256 } from '@ethersproject/keccak256';
-import { toUtf8Bytes } from '@ethersproject/strings';
+// import { keccak256 } from '@ethersproject/keccak256';
+// import { toUtf8Bytes } from '@ethersproject/strings';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk';
 import { Contract } from '@ethersproject/contracts';
 import { backendGQLRequest } from '@/helpers/requests';
