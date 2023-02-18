@@ -50,15 +50,19 @@ export const signToGetToken = createAsyncThunk(
 				// makes signature as a multisig
 				await activate(safeWallet.connector, console.log).then(
 					async (msg: any) => {
-						console.log(
-							'successful. trying signature on multisg',
-							msg,
-						);
 						const gnosisSafeContract = new Contract(
 							address,
 							GNOSIS_SAFE_CONTRACT_ABI,
 							library,
 						);
+						console.log(
+							'successful. trying signature on multisg',
+							msg,
+							gnosisSafeContract,
+							address,
+							library,
+						);
+
 						// create listener that will listen for the SignMsg event on the Gnosis contract
 						const listenToGnosisSafeContract = new Promise(
 							resolve => {
