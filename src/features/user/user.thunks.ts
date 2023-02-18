@@ -48,10 +48,11 @@ export const signToGetToken = createAsyncThunk(
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
 			let isSafeEnvironment;
+
 			//TODO Move this somewhere else <<<<<<<<<<<<<<
 			const gnosisSdk = new SafeAppsSDK();
 
-			const maxTime = new Promise((resolve, reject) => {
+			const maxTime = new Promise(resolve => {
 				setTimeout(() => {
 					resolve(false);
 				}, 1000);
@@ -81,9 +82,10 @@ export const signToGetToken = createAsyncThunk(
 										const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE =
 											'0x1626ba7e';
 										const magicValue =
-											await gnosisSafeContract.isValidSignature(
+											await gnosisSafeContract.checkSignatures(
 												keccak256(toUtf8Bytes(message)),
 												'0x',
+												msgHash,
 											);
 										const messageWasSigned =
 											magicValue ===
