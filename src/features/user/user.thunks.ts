@@ -61,10 +61,20 @@ export const signToGetToken = createAsyncThunk(
 			isSafeEnvironment = await Promise.race([safeInfo, maxTime]);
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+			const gSafeContract = new Contract(
+				address,
+				GNOSIS_SAFE_CONTRACT_ABI,
+				signer,
+			);
+			const magicValue = await gSafeContract.checkSignatures(
+				keccak256(toUtf8Bytes(message)),
+				'0x',
+				signature,
+			);
+			console.log({ magicValue, address, signature, signer });
 			if (isSafeEnvironment) {
-				await activate(safeWallet?.connector, () => {})
-					.then()
-					.finally(async () => {
+				await activate(safeWallet?.connector, console.log).then(
+					async () => {
 						const gnosisSafeContract = new Contract(
 							address,
 							GNOSIS_SAFE_CONTRACT_ABI,
@@ -84,8 +94,8 @@ export const signToGetToken = createAsyncThunk(
 										const magicValue =
 											await gnosisSafeContract.checkSignatures(
 												keccak256(toUtf8Bytes(message)),
+												message,
 												msgHash,
-												signature,
 											);
 										const messageWasSigned =
 											magicValue ===
@@ -101,10 +111,11 @@ export const signToGetToken = createAsyncThunk(
 						);
 						// start listening
 						safeSignature = await listenToGnosisSafeContract;
-					});
+					},
+				);
 			}
-			// if (safeSignature) signature = safeSignature;
-			// console.log({ safeSignature, signature });
+			if (safeSignature) signature = safeSignature;
+			console.log({ safeSignature, signature });
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
