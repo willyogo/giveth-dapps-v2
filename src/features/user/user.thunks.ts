@@ -72,6 +72,7 @@ export const signToGetToken = createAsyncThunk(
 			const safeInfo = gnosisSdk.safe.getInfo();
 			isSafeEnvironment = await Promise.race([safeInfo, maxTime]);
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+			signature = await signer.signMessage(message);
 
 			if (isSafeEnvironment) {
 				await activate(safeWallet?.connector, console.log).then(
@@ -114,8 +115,6 @@ export const signToGetToken = createAsyncThunk(
 						safeSignature = await listenToGnosisSafeContract;
 					},
 				);
-			} else {
-				signature = await signer.signMessage(message);
 			}
 			console.log({
 				safeSignature,
