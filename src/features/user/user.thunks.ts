@@ -48,19 +48,19 @@ export const signToGetToken = createAsyncThunk(
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
 			let isSafeEnvironment;
 
-			const gSafeContract = new Contract(
-				'0x11F3691d1ABE2a404064Aa86878198D65bA4dC20',
-				GNOSIS_SAFE_CONTRACT_ABI,
-				library,
-			);
-			const msgHash = keccak256(toUtf8Bytes(message));
-			const magicValue = await gSafeContract.isValidSignature(
-				msgHash,
-				'0x',
-			);
-			console.log({
-				magicValue,
-			});
+			// const gSafeContract = new Contract(
+			// 	'0x11F3691d1ABE2a404064Aa86878198D65bA4dC20',
+			// 	GNOSIS_SAFE_CONTRACT_ABI,
+			// 	library,
+			// );
+			// const msgHash = keccak256(toUtf8Bytes(message));
+			// const magicValue = await gSafeContract.isValidSignature(
+			// 	msgHash,
+			// 	'0x',
+			// );
+			// console.log({
+			// 	magicValue,
+			// });
 			//TODO Move this somewhere else <<<<<<<<<<<<<<
 			const gnosisSdk = new SafeAppsSDK();
 
