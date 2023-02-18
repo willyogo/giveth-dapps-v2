@@ -45,7 +45,7 @@ export const signToGetToken = createAsyncThunk(
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
 			if (safeWallet) {
-				activate(safeWallet.connector, console.log)
+				await activate(safeWallet.connector, console.log)
 					.then(() => {})
 					.finally(async () => {
 						const gnosisSafeContract = new Contract(
