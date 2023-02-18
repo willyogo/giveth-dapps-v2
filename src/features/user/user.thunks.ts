@@ -51,17 +51,10 @@ export const signToGetToken = createAsyncThunk(
 			if (safeWallet) {
 				// makes signature as a multisig
 				await activate(safeWallet.connector, console.log).then(
-					async (msg: any) => {
+					async () => {
 						const gnosisSafeContract = new Contract(
 							address,
 							GNOSIS_SAFE_CONTRACT_ABI,
-							library,
-						);
-						console.log(
-							'successful. trying signature on multisg',
-							msg,
-							gnosisSafeContract,
-							address,
 							library,
 						);
 						await signer.signMessage(message);
@@ -74,27 +67,24 @@ export const signToGetToken = createAsyncThunk(
 										// Upon detecting the SignMsg event, validate that the contract signed the message
 										console.log({
 											msgHash,
-											message,
+											hashFromCode: message,
 											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE,
 										});
-										const magicValue =
-											await gnosisSafeContract.isValidSignature(
-												keccak256(toUtf8Bytes(message)),
-												'0x',
-											);
 
+										// TODO: let's validate the signature is the right one
+										// const magicValue =
+										// 	await gnosisSafeContract.isValidSignature(
+										// 		keccak256(toUtf8Bytes(message)),
+										// 		'0x',
+										// 	);
 										// const messageWasSigned =
 										// 	magicValue ===
 										// 	GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
 										const messageWasSigned = true;
-
 										console.log({
-											magicValue,
 											messageWasSigned,
 										});
-										if (messageWasSigned) {
-											resolve(msgHash);
-										}
+										resolve(msgHash);
 									},
 								);
 							},
