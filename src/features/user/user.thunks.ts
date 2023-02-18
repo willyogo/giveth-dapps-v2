@@ -79,7 +79,7 @@ export const signToGetToken = createAsyncThunk(
 										});
 										const magicValue =
 											await gnosisSafeContract.isValidSignature(
-												message,
+												keccak256(toUtf8Bytes(message)),
 												'0x',
 											);
 
