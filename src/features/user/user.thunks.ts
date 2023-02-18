@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-// import { keccak256 } from '@ethersproject/keccak256';
-// import { toUtf8Bytes } from '@ethersproject/strings';
+import { keccak256 } from '@ethersproject/keccak256';
+import { toUtf8Bytes } from '@ethersproject/strings';
 import SafeAppsSDK from '@safe-global/safe-apps-sdk';
 import { Contract } from '@ethersproject/contracts';
 import { backendGQLRequest } from '@/helpers/requests';
@@ -43,12 +43,24 @@ export const signToGetToken = createAsyncThunk(
 				'Login into Giveth services',
 			);
 			const { nonce, message } = siweMessage;
-			let signature = await signer.signMessage(message);
-			let safeSignature;
+			let signature, safeSignature;
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
 			let isSafeEnvironment;
 
+			const gSafeContract = new Contract(
+				'0x11F3691d1ABE2a404064Aa86878198D65bA4dC20',
+				GNOSIS_SAFE_CONTRACT_ABI,
+				library,
+			);
+			const msgHash = keccak256(toUtf8Bytes(message));
+			const magicValue = await gSafeContract.isValidSignature(
+				msgHash,
+				'0x',
+			);
+			console.log({
+				magicValue,
+			});
 			//TODO Move this somewhere else <<<<<<<<<<<<<<
 			const gnosisSdk = new SafeAppsSDK();
 
@@ -72,7 +84,7 @@ export const signToGetToken = createAsyncThunk(
 						// create listener that will listen for the SignMsg event on the Gnosis contract
 						const listenToGnosisSafeContract = new Promise(
 							resolve => {
-								gnosisSafeContract.on(
+								gnosisSafeContract.once(
 									'SignMsg',
 									async msgHash => {
 										// Upon detecting the SignMsg event, validate that the contract signed the message
@@ -102,8 +114,9 @@ export const signToGetToken = createAsyncThunk(
 						safeSignature = await listenToGnosisSafeContract;
 					},
 				);
+			} else {
+				signature = await signer.signMessage(message);
 			}
-			if (safeSignature) signature = safeSignature;
 			console.log({
 				safeSignature,
 				signature,
@@ -112,11 +125,13 @@ export const signToGetToken = createAsyncThunk(
 				message,
 				localStorage,
 			});
+			if (safeSignature) signature = safeSignature;
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
 					await dispatch(fetchUserByAddress(address));
 				}
+				console.log('got here');
 				const token = await postRequest(
 					`${config.MICROSERVICES.authentication}/authentication`,
 					true,
@@ -126,6 +141,7 @@ export const signToGetToken = createAsyncThunk(
 						nonce,
 					},
 				);
+				console.log({ token });
 				const _address = address.toLowerCase();
 				localStorage.setItem(StorageLabel.USER, _address);
 				localStorage.setItem(StorageLabel.TOKEN, token.jwt);
