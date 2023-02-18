@@ -1,7 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Contract } from '@ethersproject/contracts';
-import { keccak256 } from '@ethersproject/keccak256';
-import { toUtf8Bytes } from '@ethersproject/strings';
 import { backendGQLRequest } from '@/helpers/requests';
 import { postRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
