@@ -44,47 +44,47 @@ export const signToGetToken = createAsyncThunk(
 
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
-			if (!!safeWallet?.connector?.supportedChainIds) {
+			if (safeWallet?.connector) {
 				try {
 					// makes signature as a multisig
-					await activate(safeWallet.connector, console.log).then(
-						async () => {
-							const gnosisSafeContract = new Contract(
-								address,
-								GNOSIS_SAFE_CONTRACT_ABI,
-								library,
-							);
-							// create listener that will listen for the SignMsg event on the Gnosis contract
-							const listenToGnosisSafeContract = new Promise(
-								resolve => {
-									gnosisSafeContract.on(
-										'SignMsg',
-										async msgHash => {
-											// Upon detecting the SignMsg event, validate that the contract signed the message
+					await activate(safeWallet.connector, (e: any) => {
+						console.log({ e });
+					}).then(async () => {
+						const gnosisSafeContract = new Contract(
+							address,
+							GNOSIS_SAFE_CONTRACT_ABI,
+							library,
+						);
+						// create listener that will listen for the SignMsg event on the Gnosis contract
+						const listenToGnosisSafeContract = new Promise(
+							resolve => {
+								gnosisSafeContract.on(
+									'SignMsg',
+									async msgHash => {
+										// Upon detecting the SignMsg event, validate that the contract signed the message
 
-											// TODO: let's validate the signature is the right one
-											// const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE = '0x1626ba7e';
-											// const magicValue =
-											// 	await gnosisSafeContract.isValidSignature(
-											// 		keccak256(toUtf8Bytes(message)),
-											// 		'0x',
-											// 	);
-											// const messageWasSigned =
-											// 	magicValue ===
-											// 	GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
-											const messageWasSigned = true;
-											console.log({
-												messageWasSigned,
-											});
-											resolve(msgHash);
-										},
-									);
-								},
-							);
-							// start listening
-							await listenToGnosisSafeContract;
-						},
-					);
+										// TODO: let's validate the signature is the right one
+										// const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE = '0x1626ba7e';
+										// const magicValue =
+										// 	await gnosisSafeContract.isValidSignature(
+										// 		keccak256(toUtf8Bytes(message)),
+										// 		'0x',
+										// 	);
+										// const messageWasSigned =
+										// 	magicValue ===
+										// 	GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
+										const messageWasSigned = true;
+										console.log({
+											messageWasSigned,
+										});
+										resolve(msgHash);
+									},
+								);
+							},
+						);
+						// start listening
+						await listenToGnosisSafeContract;
+					});
 				} catch (error) {
 					console.log('not a gnosis safe env');
 				}
