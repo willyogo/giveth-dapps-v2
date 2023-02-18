@@ -50,45 +50,41 @@ export const signToGetToken = createAsyncThunk(
 				// makes signature as a multisig
 				await activate(safeWallet.connector, console.log).then(
 					async (msg: any) => {
-						if (msg) {
-							console.log(
-								'successful. trying signature on multisg',
-								msg,
-							);
-							const gnosisSafeContract = new Contract(
-								address,
-								GNOSIS_SAFE_CONTRACT_ABI,
-								library,
-							);
-							// create listener that will listen for the SignMsg event on the Gnosis contract
-							const listenToGnosisSafeContract = new Promise(
-								resolve => {
-									gnosisSafeContract.on(
-										'SignMsg',
-										async msgHash => {
-											// Upon detecting the SignMsg event, validate that the contract signed the message
-											const magicValue =
-												await gnosisSafeContract.isValidSignature(
-													message,
-													'0x',
-												);
-											const messageWasSigned =
-												magicValue ===
-												GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
+						console.log(
+							'successful. trying signature on multisg',
+							msg,
+						);
+						const gnosisSafeContract = new Contract(
+							address,
+							GNOSIS_SAFE_CONTRACT_ABI,
+							library,
+						);
+						// create listener that will listen for the SignMsg event on the Gnosis contract
+						const listenToGnosisSafeContract = new Promise(
+							resolve => {
+								gnosisSafeContract.on(
+									'SignMsg',
+									async msgHash => {
+										// Upon detecting the SignMsg event, validate that the contract signed the message
+										const magicValue =
+											await gnosisSafeContract.isValidSignature(
+												message,
+												'0x',
+											);
+										const messageWasSigned =
+											magicValue ===
+											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
 
-											if (messageWasSigned) {
-												resolve(msgHash);
-											}
-										},
-									);
-								},
-							);
-							// start listening
-							signature = await listenToGnosisSafeContract;
-							console.log({ signature });
-						} else {
-							signature = await signer.signMessage(message);
-						}
+										if (messageWasSigned) {
+											resolve(msgHash);
+										}
+									},
+								);
+							},
+						);
+						// start listening
+						signature = await listenToGnosisSafeContract;
+						console.log({ signature });
 					},
 				);
 			} else {
