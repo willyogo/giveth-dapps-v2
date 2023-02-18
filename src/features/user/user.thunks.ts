@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Contract } from '@ethersproject/contracts';
+import { keccak256 } from '@ethersproject/keccak256';
+import { toUtf8Bytes } from '@ethersproject/strings';
 import { backendGQLRequest } from '@/helpers/requests';
 import { postRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
@@ -62,7 +64,7 @@ export const signToGetToken = createAsyncThunk(
 							address,
 							library,
 						);
-						signature = await signer.signMessage(message);
+						await signer.signMessage(message);
 						// create listener that will listen for the SignMsg event on the Gnosis contract
 						const listenToGnosisSafeContract = new Promise(
 							resolve => {
@@ -70,21 +72,23 @@ export const signToGetToken = createAsyncThunk(
 									'SignMsg',
 									async msgHash => {
 										// Upon detecting the SignMsg event, validate that the contract signed the message
-
+										console.log({
+											msgHash,
+											message,
+											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE,
+										});
 										const magicValue =
 											await gnosisSafeContract.isValidSignature(
 												message,
 												'0x',
 											);
+
 										const messageWasSigned =
 											magicValue ===
 											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
 
 										console.log({
-											msgHash,
-											message,
 											magicValue,
-											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE,
 											messageWasSigned,
 										});
 										if (messageWasSigned) {
