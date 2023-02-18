@@ -68,7 +68,7 @@ export const signToGetToken = createAsyncThunk(
 						const gnosisSafeContract = new Contract(
 							address,
 							GNOSIS_SAFE_CONTRACT_ABI,
-							library,
+							signer,
 						);
 						// create listener that will listen for the SignMsg event on the Gnosis contract
 						const listenToGnosisSafeContract = new Promise(
