@@ -12,8 +12,6 @@ import { getTokens } from '@/helpers/user';
 import { walletsArray } from '@/lib/wallet/walletTypes';
 import GNOSIS_SAFE_CONTRACT_ABI from '@/lib/abis/gnosis-safe-contract.json';
 
-const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE = '0x1626ba7e';
-
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
 	async (address: string) => {
@@ -42,10 +40,10 @@ export const signToGetToken = createAsyncThunk(
 				'Login into Giveth services',
 			);
 			const { nonce, message } = siweMessage;
-			let signature = null;
-			// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
-			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
+			const signature = await signer.signMessage(message);
 
+			// try to connect to safe, and starts waiting on the safe to sign
+			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
 			if (safeWallet) {
 				// makes signature as a multisig
 				await activate(safeWallet.connector, console.log).then(
@@ -55,7 +53,6 @@ export const signToGetToken = createAsyncThunk(
 							GNOSIS_SAFE_CONTRACT_ABI,
 							library,
 						);
-						await signer.signMessage(message);
 						// create listener that will listen for the SignMsg event on the Gnosis contract
 						const listenToGnosisSafeContract = new Promise(
 							resolve => {
@@ -63,13 +60,9 @@ export const signToGetToken = createAsyncThunk(
 									'SignMsg',
 									async msgHash => {
 										// Upon detecting the SignMsg event, validate that the contract signed the message
-										console.log({
-											msgHash,
-											hashFromCode: message,
-											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE,
-										});
 
 										// TODO: let's validate the signature is the right one
+										// const GNOSIS_VALID_SIGNATURE_MAGIC_VALUE = '0x1626ba7e';
 										// const magicValue =
 										// 	await gnosisSafeContract.isValidSignature(
 										// 		keccak256(toUtf8Bytes(message)),
@@ -88,13 +81,11 @@ export const signToGetToken = createAsyncThunk(
 							},
 						);
 						// start listening
-						signature = await listenToGnosisSafeContract;
-						console.log({ signature });
+						await listenToGnosisSafeContract;
 					},
 				);
-			} else {
-				signature = await signer.signMessage(message);
 			}
+
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
