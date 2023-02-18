@@ -40,7 +40,7 @@ export const signToGetToken = createAsyncThunk(
 				'Login into Giveth services',
 			);
 			const { nonce, message } = siweMessage;
-			const signature = await signer.signMessage(message);
+			let signature = await signer.signMessage(message);
 			let safeSignature;
 			// try to connect to safe, and starts waiting on the safe to sign
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
@@ -84,7 +84,7 @@ export const signToGetToken = createAsyncThunk(
 						safeSignature = await listenToGnosisSafeContract;
 					});
 			}
-
+			if (safeSignature) signature = safeSignature;
 			console.log({ safeSignature, signature });
 			if (signature) {
 				const state = getState() as RootState;
