@@ -61,17 +61,6 @@ export const signToGetToken = createAsyncThunk(
 			isSafeEnvironment = await Promise.race([safeInfo, maxTime]);
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-			const gSafeContract = new Contract(
-				address,
-				GNOSIS_SAFE_CONTRACT_ABI,
-				signer,
-			);
-			const magicValue = await gSafeContract.checkSignatures(
-				keccak256(toUtf8Bytes(message)),
-				'0x',
-				signature,
-			);
-			console.log({ magicValue, address, signature, signer });
 			if (isSafeEnvironment) {
 				await activate(safeWallet?.connector, console.log).then(
 					async () => {
