@@ -3,4 +3,6 @@ export interface ISignToGetToken {
 	chainId?: number;
 	signer: any;
 	pathname?: string;
+	library: any;
+	activate: any;
 }

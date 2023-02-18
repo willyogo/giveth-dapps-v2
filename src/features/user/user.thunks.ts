@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Contract } from '@ethersproject/contracts';
-import { useWeb3React } from '@web3-react/core';
 import { backendGQLRequest } from '@/helpers/requests';
 import { postRequest } from '@/helpers/requests';
 import { GET_USER_BY_ADDRESS } from './user.queries';
@@ -25,11 +24,17 @@ export const fetchUserByAddress = createAsyncThunk(
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{ address, chainId, signer, pathname }: ISignToGetToken,
+		{
+			address,
+			chainId,
+			signer,
+			pathname,
+			library,
+			activate,
+		}: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
 		try {
-			const { library, activate } = useWeb3React();
 			const siweMessage: any = await createSiweMessage(
 				address!,
 				chainId!,
@@ -40,42 +45,50 @@ export const signToGetToken = createAsyncThunk(
 			let signature = null;
 			// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
 			const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
+
 			if (safeWallet) {
 				// makes signature as a multisig
 				await activate(safeWallet.connector, console.log).then(
-					async () => {
-						console.log('successful. trying signature on multisg');
-						const gnosisSafeContract = new Contract(
-							address,
-							GNOSIS_SAFE_CONTRACT_ABI,
-							library,
-						);
-						// create listener that will listen for the SignMsg event on the Gnosis contract
-						const listenToGnosisSafeContract = new Promise(
-							resolve => {
-								gnosisSafeContract.on(
-									'SignMsg',
-									async msgHash => {
-										// Upon detecting the SignMsg event, validate that the contract signed the message
-										const magicValue =
-											await gnosisSafeContract.isValidSignature(
-												message,
-												'0x',
-											);
-										const messageWasSigned =
-											magicValue ===
-											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
+					async (msg: any) => {
+						if (msg) {
+							console.log(
+								'successful. trying signature on multisg',
+								msg,
+							);
+							const gnosisSafeContract = new Contract(
+								address,
+								GNOSIS_SAFE_CONTRACT_ABI,
+								library,
+							);
+							// create listener that will listen for the SignMsg event on the Gnosis contract
+							const listenToGnosisSafeContract = new Promise(
+								resolve => {
+									gnosisSafeContract.on(
+										'SignMsg',
+										async msgHash => {
+											// Upon detecting the SignMsg event, validate that the contract signed the message
+											const magicValue =
+												await gnosisSafeContract.isValidSignature(
+													message,
+													'0x',
+												);
+											const messageWasSigned =
+												magicValue ===
+												GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
 
-										if (messageWasSigned) {
-											resolve(msgHash);
-										}
-									},
-								);
-							},
-						);
-						// start listening
-						signature = await listenToGnosisSafeContract;
-						console.log({ signature });
+											if (messageWasSigned) {
+												resolve(msgHash);
+											}
+										},
+									);
+								},
+							);
+							// start listening
+							signature = await listenToGnosisSafeContract;
+							console.log({ signature });
+						} else {
+							signature = await signer.signMessage(message);
+						}
 					},
 				);
 			} else {
