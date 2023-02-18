@@ -70,11 +70,7 @@ export const signToGetToken = createAsyncThunk(
 									'SignMsg',
 									async msgHash => {
 										// Upon detecting the SignMsg event, validate that the contract signed the message
-										console.log({
-											msgHash,
-											message,
-											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE,
-										});
+
 										const magicValue =
 											await gnosisSafeContract.isValidSignature(
 												message,
@@ -84,6 +80,13 @@ export const signToGetToken = createAsyncThunk(
 											magicValue ===
 											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE;
 
+										console.log({
+											msgHash,
+											message,
+											magicValue,
+											GNOSIS_VALID_SIGNATURE_MAGIC_VALUE,
+											messageWasSigned,
+										});
 										if (messageWasSigned) {
 											resolve(msgHash);
 										}
