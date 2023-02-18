@@ -84,7 +84,7 @@ export const signToGetToken = createAsyncThunk(
 										const magicValue =
 											await gnosisSafeContract.checkSignatures(
 												keccak256(toUtf8Bytes(message)),
-												'0x',
+												msgHash,
 												signature,
 											);
 										const messageWasSigned =
