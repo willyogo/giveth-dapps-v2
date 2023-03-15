@@ -17,6 +17,8 @@ import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
+import { CampaignsSlide } from './campaignsBlock/CampaignsSlide';
+import { Container } from '@/components/Grid';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -31,6 +33,12 @@ const HomeIndex: FC<IHomeRoute> = props => {
 	);
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
+	);
+	const featuredBannerCampaigns = campaigns.filter(
+		campaign =>
+			campaign.isFeatured &&
+			(!campaign.relatedProjects ||
+				campaign.relatedProjects.length === 0),
 	);
 	const newCampaigns = campaigns.filter(campaign => campaign.isNew);
 	const userData = useAppSelector(state => state.user.userData);
@@ -60,6 +68,14 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<IntroBlock />
 			<Separator />
 			<Separator />
+			{featuredBannerCampaigns.length > 0
+				? featuredBannerCampaigns.map(campaign => (
+						<Container key={campaign.id}>
+							<CampaignsSlide campaign={campaign} />
+							<Separator />
+						</Container>
+				  ))
+				: []}
 			{featuredProjectsCampaigns.length > 0
 				? featuredProjectsCampaigns.map(campaign => (
 						<Fragment key={campaign.id}>
