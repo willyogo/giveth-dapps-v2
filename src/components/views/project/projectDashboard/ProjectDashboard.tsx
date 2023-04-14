@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react';
-import { brandColors, Button, GLink } from '@giveth/ui-design-system';
+import { brandColors, Button, GLink, H6 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { useProjectContext } from '@/context/project.context';
+import ProjectCard from '@/components/project-card/ProjectCard';
+import { IProject } from '@/apollo/types/types';
 
 interface IProjectDashboardProps {}
 
@@ -34,7 +36,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 	const handleSummarizeProjectDesc = async () => {
 		setDesc('Generating...');
 		const { result } = await postRequest('/api/ai/description', false, {
-			url: config.FRONTEND_LINK + '/project/' + projectData?.slug,
+			desc: projectData?.description,
 		});
 		setDesc(result);
 	};
@@ -46,6 +48,10 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 		});
 		setMedium(result);
 	};
+
+	const NewProject: IProject | undefined = projectData
+		? { ...projectData, descriptionSummary: desc }
+		: undefined;
 	return (
 		<Flex flexDirection='column' gap='24px'>
 			<Section flexDirection='column' gap='12px'>
@@ -89,7 +95,16 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						buttonType='texty'
 					/>
 				</Header>
-				<Content>{desc}</Content>
+				<Content>
+					{desc && projectData && NewProject && (
+						<>
+							<H6>Old Card</H6>
+							<ProjectCard project={projectData} />
+							<H6>New Card</H6>
+							<ProjectCard project={NewProject} />
+						</>
+					)}
+				</Content>
 			</Section>
 			<Section flexDirection='column' gap='12px'>
 				<Header alignItems='center' gap='12px'>
