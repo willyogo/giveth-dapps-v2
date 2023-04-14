@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
-import { Button, GLink } from '@giveth/ui-design-system';
+import { brandColors, Button, GLink } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
@@ -11,6 +12,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 	const [categories, setCategories] = useState('');
 	const [seo, setSeo] = useState('');
 	const [desc, setDesc] = useState('');
+	const [medium, setMedium] = useState('');
 	const { projectData } = useProjectContext();
 
 	const handleDetectMyProjectsCategories = async () => {
@@ -36,10 +38,18 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 		});
 		setDesc(result);
 	};
+
+	const handleMedium = async () => {
+		setMedium("Be patient, I'm Writing something special...");
+		const { result } = await postRequest('/api/ai/generate', false, {
+			url: config.FRONTEND_LINK + '/project/' + projectData?.slug,
+		});
+		setMedium(result);
+	};
 	return (
 		<Flex flexDirection='column' gap='24px'>
-			<Flex flexDirection='column' gap='12px'>
-				<Flex alignItems='center' gap='12px'>
+			<Section flexDirection='column' gap='12px'>
+				<Header alignItems='center' gap='12px'>
 					<GLink size='Big'>
 						Detect My project&apos;s categories
 					</GLink>
@@ -47,28 +57,28 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						label='Detect'
 						onClick={handleDetectMyProjectsCategories}
 						size='small'
-						buttonType='texty-secondary'
+						buttonType='texty'
 					/>
-				</Flex>
-				<GLink>{categories}</GLink>
-			</Flex>
-			<Flex flexDirection='column' gap='12px'>
-				<Flex alignItems='center' gap='12px'>
+				</Header>
+				<Content>{categories}</Content>
+			</Section>
+			<Section flexDirection='column' gap='12px'>
+				<Header alignItems='center' gap='12px'>
 					<GLink size='Big'>
 						Summarize My project&apos;s description for SEO
-						description meta data
+						description&apos;s meta data
 					</GLink>
 					<Button
 						label='Detect'
 						onClick={handleSeoDesc}
 						size='small'
-						buttonType='texty-secondary'
+						buttonType='texty'
 					/>
-				</Flex>
-				<GLink>{seo}</GLink>
-			</Flex>
-			<Flex flexDirection='column' gap='12px'>
-				<Flex alignItems='center' gap='12px'>
+				</Header>
+				<Content>{seo}</Content>
+			</Section>
+			<Section flexDirection='column' gap='12px'>
+				<Header alignItems='center' gap='12px'>
 					<GLink size='Big'>
 						Summarize My project&apos;s description for project card
 					</GLink>
@@ -76,11 +86,41 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						label='Detect'
 						onClick={handleSummarizeProjectDesc}
 						size='small'
-						buttonType='texty-secondary'
+						buttonType='texty'
 					/>
-				</Flex>
-				<GLink>{desc}</GLink>
-			</Flex>
+				</Header>
+				<Content>{desc}</Content>
+			</Section>
+			<Section flexDirection='column' gap='12px'>
+				<Header alignItems='center' gap='12px'>
+					<GLink size='Big'>
+						Write a medium Article for my project
+					</GLink>
+					<Button
+						label='Detect'
+						onClick={handleMedium}
+						size='small'
+						buttonType='texty'
+					/>
+				</Header>
+				<Content dangerouslySetInnerHTML={{ __html: medium }}></Content>
+			</Section>
 		</Flex>
 	);
 };
+
+const Section = styled(Flex)`
+	background-color: white;
+	border-radius: 8px;
+	overflow: hidden;
+`;
+
+const Header = styled(Flex)`
+	background-color: ${brandColors.giv[500]};
+	padding: 24px;
+	color: white;
+`;
+
+const Content = styled(GLink)`
+	padding: 24px;
+`;
