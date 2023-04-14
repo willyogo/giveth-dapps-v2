@@ -52,7 +52,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 
 	const tabsArray = isAdmin
 		? [
-				{ title: 'Dashboard', query: EProjectPageTabs.DASHBOARD },
+				{ title: 'label.dashboard', query: EProjectPageTabs.DASHBOARD },
 				...baseTabsArray,
 		  ]
 		: [...baseTabsArray];
