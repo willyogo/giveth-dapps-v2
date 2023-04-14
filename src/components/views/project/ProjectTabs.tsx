@@ -8,15 +8,18 @@ import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { EProjectPageTabs } from './ProjectIndex';
+import { compareAddresses } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 
 interface IProjectTabs {
-	activeTab: number;
+	activeTab: EProjectPageTabs;
 	slug: string;
 	totalDonations?: number;
 }
@@ -26,14 +29,15 @@ const badgeCount = (count?: number) => {
 };
 
 const ProjectTabs = (props: IProjectTabs) => {
+	const [isAdmin, setIsAdmin] = useState<boolean>(false);
+	const { projectData, boostersData } = useProjectContext();
 	const { activeTab, slug, totalDonations } = props;
-	const { projectData } = useProjectContext();
-	const { totalProjectUpdates } = projectData || {};
+	const { totalProjectUpdates, adminUser } = projectData || {};
 	const { formatMessage } = useIntl();
-	const { boostersData } = useProjectContext();
+	const { userData: user } = useAppSelector(state => state.user);
 
-	const tabsArray = [
-		{ title: 'label.about' },
+	const baseTabsArray = [
+		{ title: 'label.about', query: EProjectPageTabs.ABOUT },
 		{
 			title: 'label.updates',
 			badge: totalProjectUpdates,
@@ -45,6 +49,19 @@ const ProjectTabs = (props: IProjectTabs) => {
 			query: EProjectPageTabs.DONATIONS,
 		},
 	];
+
+	const tabsArray = isAdmin
+		? [
+				{ title: 'Dashboard', query: EProjectPageTabs.DASHBOARD },
+				...baseTabsArray,
+		  ]
+		: [...baseTabsArray];
+
+	useEffect(() => {
+		setIsAdmin(
+			compareAddresses(adminUser?.walletAddress, user?.walletAddress),
+		);
+	}, [user, adminUser]);
 
 	if (projectData?.verified)
 		tabsArray.push({
@@ -63,7 +80,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 					}`}
 					scroll={false}
 				>
-					<Tab className={activeTab === index ? 'active' : ''}>
+					<Tab className={activeTab === i.query ? 'active' : ''}>
 						{formatMessage({ id: i.title })}
 						{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
 					</Tab>

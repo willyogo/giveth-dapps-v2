@@ -28,6 +28,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
+import { ProjectDashboard } from './projectDashboard/ProjectDashboard';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -41,6 +42,8 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 });
 
 export enum EProjectPageTabs {
+	DASHBOARD = 'dashboard',
+	ABOUT = 'about',
 	DONATIONS = 'donations',
 	UPDATES = 'updates',
 	GIVPOWER = 'givpower',
@@ -49,7 +52,7 @@ export enum EProjectPageTabs {
 const donationsPerPage = 10;
 
 const ProjectIndex: FC<IProjectBySlug> = () => {
-	const [activeTab, setActiveTab] = useState(0);
+	const [activeTab, setActiveTab] = useState(EProjectPageTabs.ABOUT);
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
@@ -63,17 +66,23 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	useEffect(() => {
 		if (!isSSRMode) {
 			switch (router.query.tab) {
+				case EProjectPageTabs.DASHBOARD:
+					setActiveTab(EProjectPageTabs.DASHBOARD);
+					break;
+				case EProjectPageTabs.ABOUT:
+					setActiveTab(EProjectPageTabs.ABOUT);
+					break;
 				case EProjectPageTabs.UPDATES:
-					setActiveTab(1);
+					setActiveTab(EProjectPageTabs.UPDATES);
 					break;
 				case EProjectPageTabs.DONATIONS:
-					setActiveTab(2);
+					setActiveTab(EProjectPageTabs.DONATIONS);
 					break;
 				case EProjectPageTabs.GIVPOWER:
-					setActiveTab(3);
+					setActiveTab(EProjectPageTabs.GIVPOWER);
 					break;
 				default:
-					setActiveTab(0);
+					setActiveTab(EProjectPageTabs.ABOUT);
 					break;
 			}
 		}
@@ -170,11 +179,16 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								message='This project is not active.'
 							/>
 						)}
-						{activeTab === 0 && (
+						{activeTab === EProjectPageTabs.DASHBOARD && (
+							<ProjectDashboard />
+						)}
+						{activeTab === EProjectPageTabs.ABOUT && (
 							<RichTextViewer content={description} />
 						)}
-						{activeTab === 1 && <ProjectUpdates />}
-						{activeTab === 2 && (
+						{activeTab === EProjectPageTabs.UPDATES && (
+							<ProjectUpdates />
+						)}
+						{activeTab === EProjectPageTabs.DONATIONS && (
 							<ProjectDonations
 								donationsByProjectId={{
 									donations,
@@ -182,7 +196,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								}}
 							/>
 						)}
-						{activeTab === 3 && (
+						{activeTab === EProjectPageTabs.GIVPOWER && (
 							<ProjectGIVPowerIndex
 								projectPower={projectPower}
 								projectFuturePower={projectFuturePower}
