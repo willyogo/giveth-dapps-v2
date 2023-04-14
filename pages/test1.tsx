@@ -32,7 +32,7 @@ const TestRoute = () => {
 	);
 };
 
-//This comment is for testing 1
+//This comment is for testing
 
 const TestIndex = () => {
 	// const xDaiValues = useSelector(
