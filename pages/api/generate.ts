@@ -6,19 +6,6 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-function generatePrompt(animal: string) {
-	const capitalizedAnimal =
-		animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-	return `Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
-}
-
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse,
@@ -32,16 +19,6 @@ export default async function handler(
 		});
 		return;
 	}
-
-	const animal = req.body.animal || 'DOG';
-	// if (animal.trim().length === 0) {
-	// 	res.status(400).json({
-	// 		error: {
-	// 			message: 'Please enter a valid animal',
-	// 		},
-	// 	});
-	// 	return;
-	// }
 
 	try {
 		const completion = await openai.createChatCompletion({
