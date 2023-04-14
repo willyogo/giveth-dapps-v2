@@ -12,6 +12,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 	const { projectData } = useProjectContext();
 
 	const handleDetectMyProjectsCategories = async () => {
+		setCategories('loading');
 		const { result } = await postRequest('/api/ai/categorize', false, {
 			url: config.FRONTEND_LINK + '/project/' + projectData?.slug,
 		});
