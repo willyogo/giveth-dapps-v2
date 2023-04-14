@@ -69,7 +69,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						description&apos;s meta data
 					</GLink>
 					<Button
-						label='Detect'
+						label='Summarize'
 						onClick={handleSeoDesc}
 						size='small'
 						buttonType='texty'
@@ -83,7 +83,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						Summarize My project&apos;s description for project card
 					</GLink>
 					<Button
-						label='Detect'
+						label='Summarize'
 						onClick={handleSummarizeProjectDesc}
 						size='small'
 						buttonType='texty'
@@ -97,7 +97,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						Write a medium Article for my project
 					</GLink>
 					<Button
-						label='Detect'
+						label='Generate'
 						onClick={handleMedium}
 						size='small'
 						buttonType='texty'
