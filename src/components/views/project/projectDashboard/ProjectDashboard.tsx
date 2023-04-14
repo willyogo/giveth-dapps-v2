@@ -15,6 +15,7 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 	const [seo, setSeo] = useState('');
 	const [desc, setDesc] = useState('');
 	const [medium, setMedium] = useState('');
+	const [mediumLink, setMediumLink] = useState('');
 	const { projectData } = useProjectContext();
 
 	const handleDetectMyProjectsCategories = async () => {
@@ -47,6 +48,16 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 			url: config.FRONTEND_LINK + '/project/' + projectData?.slug,
 		});
 		setMedium(result);
+	};
+
+	const handlePublish = async () => {
+		setMediumLink('');
+		const { result } = await postRequest('/api/medium/publish', false, {
+			content: medium,
+			title: projectData?.title,
+		});
+		console.log('result', result.data.url);
+		setMediumLink(result.data.url);
 	};
 
 	const NewProject: IProject | undefined = projectData
@@ -117,7 +128,23 @@ export const ProjectDashboard: FC<IProjectDashboardProps> = () => {
 						size='small'
 						buttonType='texty'
 					/>
+					{medium && (
+						<Button
+							label='Publish'
+							onClick={handlePublish}
+							size='small'
+							buttonType='texty-primary'
+						/>
+					)}
 				</Header>
+				{mediumLink && (
+					<Content>
+						You can read it{' '}
+						<a href={mediumLink} target='_blank' rel='noreferrer'>
+							here
+						</a>
+					</Content>
+				)}
 				<Content dangerouslySetInnerHTML={{ __html: medium }}></Content>
 			</Section>
 		</Flex>
