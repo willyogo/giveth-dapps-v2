@@ -44,11 +44,11 @@ const FiatDonation = () => {
 		ETH: { address: mainnetAddress },
 	};
 
-	return (
-		<FiatContainer style={{ marginTop: 40 }}>
-			<H4>{formatMessage({ id: 'label.coming_soon' })}</H4>
-		</FiatContainer>
-	);
+	// return (
+	// 	<FiatContainer style={{ marginTop: 40 }}>
+	// 		<H4>{formatMessage({ id: 'label.coming_soon' })}</H4>
+	// 	</FiatContainer>
+	// );
 
 	return (
 		<>
