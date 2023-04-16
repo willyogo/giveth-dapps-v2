@@ -74,7 +74,7 @@ const FiatDonation = () => {
 								width='100%'
 								title='Onramper widget'
 								allow='accelerometer;
-  autoplay; camera; gyroscope; payment'
+  autoplay; camera; gyroscope; payment '
 								style={{
 									boxShadow:
 										'1px 1px 1px 1px rgba(0,0,0,0.2)',
