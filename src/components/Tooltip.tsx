@@ -17,7 +17,11 @@ export interface ITooltipDirection {
 	align?: 'center' | 'right' | 'left' | 'top' | 'bottom';
 }
 
-interface ITooltipProps extends ITooltipDirection {
+export interface ITooltipProperties extends ITooltipDirection {
+	width?: number;
+}
+
+interface ITooltipProps extends ITooltipProperties {
 	parentRef: RefObject<HTMLDivElement>;
 	children: ReactNode;
 }
@@ -28,6 +32,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 	parentRef,
 	direction,
 	align,
+	width,
 	children,
 }) => {
 	const [style, setStyle] = useState<CSSProperties>({});
@@ -53,6 +58,8 @@ export const Tooltip: FC<ITooltipProps> = ({
 		if (typeof window === 'undefined') return;
 		const parentRect = parentRef.current.getBoundingClientRect();
 		const childRect = childRef.current?.getBoundingClientRect();
+		const windowWidth = window.innerWidth;
+		console.log('parentRect', parentRect);
 
 		const _style = tooltipStyleCalc(
 			{
@@ -61,6 +68,8 @@ export const Tooltip: FC<ITooltipProps> = ({
 			},
 			!!isMobile,
 			parentRect,
+			windowWidth,
+			width,
 			childRect,
 		);
 		setStyle(_style);
@@ -84,7 +93,11 @@ export const Tooltip: FC<ITooltipProps> = ({
 const translateXForTopBottom = (
 	align: ITooltipDirection['align'],
 	parentRect: DOMRect,
+	windowWidth: number,
+	width?: number,
 ) => {
+	console.log(parentRect.left, width, windowWidth);
+
 	switch (align) {
 		case 'right':
 			return `-${ARROW_SIZE}px`;
@@ -100,6 +113,8 @@ const translateXForTopBottom = (
 const translateYForRightLeft = (
 	align: ITooltipDirection['align'],
 	parentRect: DOMRect,
+	windowWidth: number,
+	width?: number,
 ) => {
 	switch (align) {
 		case 'top':
@@ -116,6 +131,8 @@ const tooltipStyleCalc = (
 	position: ITooltipDirection,
 	isMobile: Boolean | null,
 	parentRect: DOMRect,
+	windowWidth: number,
+	width?: number,
 	childRect?: DOMRect, // left it here for future usage
 ): CSSProperties => {
 	const { align, direction } = position;
@@ -135,9 +152,16 @@ const tooltipStyleCalc = (
 			width: '95vw',
 		};
 	} else {
+		console.log('direction', direction);
+
 		switch (direction) {
 			case 'top':
-				translateX = translateXForTopBottom(align, parentRect);
+				translateX = translateXForTopBottom(
+					align,
+					parentRect,
+					windowWidth,
+					width,
+				);
 				style = {
 					top: parentRect.top - ARROW_SIZE,
 					left: parentRect.left,
@@ -145,7 +169,12 @@ const tooltipStyleCalc = (
 				};
 				break;
 			case 'bottom':
-				translateX = translateXForTopBottom(align, parentRect);
+				translateX = translateXForTopBottom(
+					align,
+					parentRect,
+					windowWidth,
+					width,
+				);
 				style = {
 					top: parentRect.bottom + ARROW_SIZE,
 					left: parentRect.left,
@@ -154,7 +183,12 @@ const tooltipStyleCalc = (
 				break;
 
 			case 'right':
-				translateY = translateYForRightLeft(align, parentRect);
+				translateY = translateYForRightLeft(
+					align,
+					parentRect,
+					windowWidth,
+					width,
+				);
 				style = {
 					top: parentRect.bottom,
 					left: parentRect.right + ARROW_SIZE,
@@ -162,7 +196,12 @@ const tooltipStyleCalc = (
 				};
 				break;
 			case 'left':
-				translateY = translateYForRightLeft(align, parentRect);
+				translateY = translateYForRightLeft(
+					align,
+					parentRect,
+					windowWidth,
+					width,
+				);
 				style = {
 					top: parentRect.bottom,
 					left: parentRect.left - ARROW_SIZE,

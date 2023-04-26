@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
-import { ITooltipDirection, Tooltip } from './Tooltip';
+import { ITooltipProperties, Tooltip } from './Tooltip';
 import type { FC, ReactNode } from 'react';
 
-interface IIconWithTooltipProps extends ITooltipDirection {
+interface IIconWithTooltipProps extends ITooltipProperties {
 	icon: ReactNode;
 	children: ReactNode;
 }
@@ -12,6 +12,7 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	icon,
 	direction,
 	align = 'center',
+	width,
 	children,
 }) => {
 	const [show, setShow] = useState(false);
@@ -39,7 +40,12 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 		>
 			{icon}
 			{show && (
-				<Tooltip direction={direction} align={align} parentRef={elRef}>
+				<Tooltip
+					direction={direction}
+					align={align}
+					parentRef={elRef}
+					width={width}
+				>
 					{children}
 				</Tooltip>
 			)}

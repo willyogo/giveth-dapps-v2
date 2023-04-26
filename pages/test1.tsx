@@ -49,9 +49,9 @@ const TestIndex = () => {
 	console.log('Index rerender');
 
 	useEffect(() => {
-		setInterval(() => {
-			setTest(test => !test);
-		}, 1000);
+		// setInterval(() => {
+		// 	setTest(test => !test);
+		// }, 1000);
 	}, [setTest]);
 
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
@@ -96,18 +96,19 @@ const TestIndex = () => {
 
 	return (
 		<>
+			<IconWithTooltip
+				icon={<IconHelpFilled16 />}
+				direction='bottom'
+				align='top'
+				width={240}
+			>
+				<div>
+					The rate at which you receive liquid GIV from your
+					GIVstream.
+				</div>
+			</IconWithTooltip>
 			<TestContainer>
 				this is test page.
-				<IconWithTooltip
-					icon={<IconHelpFilled16 />}
-					direction='right'
-					align='top'
-				>
-					<FlowRateTooltip>
-						The rate at which you receive liquid GIV from your
-						GIVstream.
-					</FlowRateTooltip>
-				</IconWithTooltip>
 				{/* <Tooltip direction={direction} align={align} parentRef={elRef}>
 					<div>Test</div>
 				</Tooltip> */}
