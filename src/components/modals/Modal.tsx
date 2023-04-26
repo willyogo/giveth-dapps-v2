@@ -34,6 +34,7 @@ interface IModal {
 	children: ReactNode;
 	doNotCloseOnClickOutside?: boolean;
 	className?: string;
+	autoHeight?: boolean;
 }
 
 export const Modal: FC<IModal> = ({
@@ -51,6 +52,7 @@ export const Modal: FC<IModal> = ({
 	headerColor,
 	doNotCloseOnClickOutside,
 	className,
+	autoHeight = true,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
@@ -105,16 +107,20 @@ export const Modal: FC<IModal> = ({
 					position={headerTitlePosition}
 					color={headerColor}
 				/>
-				<Scrollbars
-					renderTrackHorizontal={props => (
-						<div {...props} style={{ display: 'none' }} />
-					)}
-					{...(fullScreen || isMobile
-						? {}
-						: ScrollBarsNotFullScreenProps)}
-				>
-					{children}
-				</Scrollbars>
+				{autoHeight ? (
+					<Scrollbars
+						renderTrackHorizontal={props => (
+							<div {...props} style={{ display: 'none' }} />
+						)}
+						{...(fullScreen || isMobile
+							? {}
+							: ScrollBarsNotFullScreenProps)}
+					>
+						{children}
+					</Scrollbars>
+				) : (
+					children
+				)}
 			</ModalWrapper>
 		</Background>,
 		el.current,

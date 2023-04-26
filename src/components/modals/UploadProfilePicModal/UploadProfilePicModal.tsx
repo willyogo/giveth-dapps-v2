@@ -14,6 +14,7 @@ const UploadProfilePicModal = ({ setShowModal }: IUploadProfilePicModal) => {
 			isAnimating={isAnimating}
 			headerTitle='Upload An Image or Givers NFT'
 			headerTitlePosition='left'
+			autoHeight={false}
 		>
 			<SetProfilePic closeModal={closeModal} />
 		</Modal>
