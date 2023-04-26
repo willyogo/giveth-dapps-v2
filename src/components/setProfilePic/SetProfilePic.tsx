@@ -413,7 +413,10 @@ const PFPItemsContainer = styled(Flex)`
 `;
 
 const HideInMobile = styled.div`
-	display: none;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background-color: white;
 	${mediaQueries.tablet} {
 		display: inline-block;
 		width: 100%;
@@ -429,8 +432,6 @@ const HideInDesktop = styled.div`
 `;
 
 const CustomWrapper = styled(Wrapper)<{ isOnboarding: boolean }>`
-	${mediaQueries.tablet} {
-		max-height: ${props => (props.isOnboarding ? '' : '640px')};
-		overflow-y: auto;
-	}
+	max-height: ${props => (props.isOnboarding ? '' : '640px')};
+	overflow-y: auto;
 `;
