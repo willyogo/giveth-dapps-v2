@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, H4 } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { useAppSelector } from '@/features/hooks';
 import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { client } from '@/apollo/apolloClient';
-import styled from 'styled-components';
 
 import StaticProjects from '@/lib/constants/staticProjectsOpenAi';
 
@@ -25,7 +25,7 @@ export const generateSuggestion = async (projects: string) => {
 					},
 					{
 						role: 'user',
-						content: `I am a donor from Giveth.io and I previously donated to these projects: ${projects}. I would like ONE project suggestion from this list ${StaticProjects}. Please without any introduction just provide your response in this html format giving an anchor with the giveth.io/project/{slug} on medium text please. `,
+						content: `I am a donor from Giveth.io and I previously donated to these projects: ${projects}. I would like ONE project suggestion from this list ${StaticProjects}. Please without any introduction just provide your response in this html format and with the https://giveth.io/project/{slug} on bold text and wrapped in an anchor link please. Additionally, in a few sentences tell me why you think this project is a good fit for me.`,
 					},
 				],
 			},
