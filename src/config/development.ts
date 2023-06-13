@@ -37,7 +37,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
-	OPENSEA_ADDRESS: 'https://testnets.opensea.io/',
+	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...networksParams[5],
 		DAI_CONTRACT_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
@@ -48,7 +48,7 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['Etherscan'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-goerli-staging',
+			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
 
 		TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
@@ -110,7 +110,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
+			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
@@ -203,7 +203,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				farmStartTimeMS: 1646306818206,
+				farmStartTimeMS: 1685460000000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:

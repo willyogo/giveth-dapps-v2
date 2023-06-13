@@ -25,6 +25,7 @@ export const PROJECT_CARD_FIELDS = gql`
 		adminUser {
 			name
 			walletAddress
+			avatar
 		}
 		updatedAt
 		organization {
@@ -74,13 +75,18 @@ export const FETCH_ALL_PROJECTS = gql`
 `;
 
 export const FETCH_PROJECT_BY_SLUG = gql`
-	${PROJECT_CORE_FIELDS}
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(
 			slug: $slug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
-			...ProjectCoreFields
+			__typename
+			id
+			title
+			image
+			slug
+			verified
+			totalDonations
 			description
 			addresses {
 				address
@@ -105,6 +111,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				id
 				name
 				walletAddress
+				avatar
 			}
 			status {
 				id
@@ -129,6 +136,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				powerRank
 				round
 			}
+			givbackFactor
 		}
 	}
 `;
@@ -334,6 +342,7 @@ export const CREATE_PROJECT = gql`
 			adminUser {
 				name
 				walletAddress
+				avatar
 			}
 			image
 			impactLocation
@@ -363,6 +372,7 @@ export const UPDATE_PROJECT = gql`
 			adminUser {
 				name
 				walletAddress
+				avatar
 			}
 			addresses {
 				address

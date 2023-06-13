@@ -37,7 +37,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
-	OPENSEA_ADDRESS: 'https://rarible.com/user/',
+	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
 		...networksParams[1],
 
@@ -50,7 +50,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['etherscan'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+			'https://gateway.thegraph.com/api/4404c555dda23fe8080ed3cecd8e48cd/subgraphs/id/8Fh5uZkm44L7ma6Jh7JjveV87zvmDkJPuuMZuyvUW9S6',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -219,7 +219,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+			'https://gateway.thegraph.com/api/4404c555dda23fe8080ed3cecd8e48cd/subgraphs/id/ATN3hzfMwQqYMcyrAxqMSrr7Bxf5jKQytWZJpwLigt2p',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
@@ -312,7 +312,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/XDAI?chainId=100',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				farmStartTimeMS: 1666026660000,
+				farmStartTimeMS: 1685460000000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:

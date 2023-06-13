@@ -13,6 +13,14 @@ export interface IProjectPower {
 	round: number;
 }
 
+export interface IAdminUser {
+	id?: string;
+	email?: string;
+	name?: string;
+	walletAddress?: string;
+	avatar?: string;
+}
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -32,12 +40,7 @@ export interface IProject {
 	categories: ICategory[];
 	reaction?: IReaction;
 	totalReactions: number;
-	adminUser: {
-		id?: string;
-		email?: string;
-		name?: string;
-		walletAddress?: string;
-	};
+	adminUser: IAdminUser;
 	donations: {
 		id?: string;
 	}[];
@@ -58,6 +61,7 @@ export interface IProject {
 	projectPower: IProjectPower;
 	verificationFormStatus?: EVerificationStatus;
 	projectFuturePower: IProjectPower;
+	givbackFactor?: number;
 }
 
 export interface IDonationProject extends IProject {
@@ -69,7 +73,11 @@ export enum EProjectsFilter {
 	VERIFIED = 'Verified',
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
+	ACCEPT_FUND_ON_MAINNET = 'AcceptFundOnMainnet',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
+	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
+	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
+	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 }
 
 export enum ECampaignType {
@@ -82,9 +90,13 @@ export enum ECampaignType {
 export enum ECampaignFilterField {
 	Verified = 'verified',
 	AcceptGiv = 'givingBlocksId',
-	AcceptFundOnGnosis = 'acceptFundOnGnosis',
 	GivingBlock = 'fromGivingBlock',
 	BoostedWithGivPower = 'boostedWithGivPower',
+	AcceptFundOnMainnet = 'acceptFundOnMainnet',
+	AcceptFundOnGnosis = 'acceptFundOnGnosis',
+	AcceptFundOnPolygon = 'acceptFundOnPolygon',
+	AcceptFundOnCelo = 'acceptFundOnCelo',
+	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 }
 
 export interface ICampaign {
@@ -353,4 +365,17 @@ export interface IRecentDonation {
 	project: { title: string; slug: string };
 	user: { walletAddress: string };
 	valueUsd: number | null;
+}
+
+export interface IGiverPFPToken {
+	id: string;
+	user: {
+		id: string;
+	};
+	tokenId: number;
+	imageIpfs: string;
+}
+
+export interface IUsersPFPTokens {
+	[key: string]: IGiverPFPToken[];
 }

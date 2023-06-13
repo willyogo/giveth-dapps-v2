@@ -18,7 +18,6 @@ import {
 	formatTxLink,
 	compareAddresses,
 	formatUSD,
-	shortenAddress,
 } from '@/lib/helpers';
 import {
 	EDirection,
@@ -38,6 +37,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 
 const itemPerPage = 10;
 
@@ -130,6 +130,8 @@ const ProjectDonationTable = ({
 		if (page !== 0) setPage(0);
 	}, [searchTerm]);
 
+	console.log('donation.user', donations);
+
 	return (
 		<Wrapper>
 			<SearchBox
@@ -147,7 +149,9 @@ const ProjectDonationTable = ({
 						<SortIcon order={order} title={EOrderBy.CreationDate} />
 					</TableHeader>
 					<TableHeader>
-						{formatMessage({ id: 'label.donor' })}
+						<LeftPadding>
+							{formatMessage({ id: 'label.donor' })}
+						</LeftPadding>
 					</TableHeader>
 					{isAdmin && (
 						<TableHeader>
@@ -182,15 +186,13 @@ const ProjectDonationTable = ({
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.donationType ===
-								EDonationType.POIGNART
-									? 'PoignART'
-									: donation.anonymous
-									? 'Anonymous'
-									: donation.user?.name ||
-									  donation.user?.firstName ||
-									  shortenAddress(
-											donation.user.walletAddress?.toLowerCase(),
-									  )}
+								EDonationType.POIGNART ? (
+									'PoignART'
+								) : donation.anonymous ? (
+									<LeftPadding>Anonymous</LeftPadding>
+								) : (
+									<UserWithPFPInCell user={donation.user} />
+								)}
 							</DonationTableCell>
 							{isAdmin && (
 								<DonationTableCell>
@@ -261,6 +263,10 @@ const Currency = styled.div`
 	color: ${neutralColors.gray[600]};
 `;
 
+const LeftPadding = styled.div`
+	padding-left: 44px;
+`;
+
 const Wrapper = styled.div`
 	margin: 50px 0 32px;
 	display: flex;
@@ -287,8 +293,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1.25fr 1.25fr 1fr 1.25fr 1fr 1fr 1fr'
-			: '1.25fr 1.25fr 1.25fr 1fr 1fr 1fr'};
+			? '0.9fr 1.5fr 1fr 1.25fr 0.8fr 1.1fr 1fr'
+			: '0.9fr 1.5fr 1.1fr 0.8fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 
@@ -296,6 +302,9 @@ const DonationRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
+	}
+	&:hover #pfp-avatar {
+		box-shadow: 0px 0.762881px 4.57729px 1.14432px rgba(225, 69, 141, 0.5);
 	}
 `;
 

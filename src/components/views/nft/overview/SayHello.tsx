@@ -1,26 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ButtonLink, Container, H1, QuoteText } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonLink,
+	Container,
+	D3,
+	QuoteText,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const SayHelloSection = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<OverviewContainer>
 			<Container>
 				<FlexContainer>
-					<Flex flexDirection='column' gap='24px'>
-						<H1>
-							Say Hello to... <br /> The Givers{' '}
-						</H1>
+					<TextsContainer flexDirection='column' gap='24px'>
+						<ColoredD3>
+							{formatMessage({ id: 'label.say_hello_to' })}
+						</ColoredD3>
+						<D3>The Givers </D3>
 						<QuoteText>
-							Show your support for the Future of Giving and
-							unlock your unique Giveth flair by minting one of
-							the first NFT PFP artworks inspired by Giveth.
+							{formatMessage({ id: 'label.show_your_support' })}
 						</QuoteText>
 
 						<CustomLink href={Routes.NFTMint} passHref>
@@ -39,7 +46,7 @@ const SayHelloSection = () => {
 								linkType='primary'
 							/>
 						</CustomLink> */}
-					</Flex>
+					</TextsContainer>
 					<CustomImage
 						src={'/images/nft/pfp-o-5.png'}
 						width={450}
@@ -55,7 +62,7 @@ const SayHelloSection = () => {
 };
 
 const OverviewContainer = styled.div`
-	padding-top: 200px;
+	padding-top: 100px;
 	position: relative;
 	::before {
 		content: ' ';
@@ -73,6 +80,11 @@ const OverviewContainer = styled.div`
 const FlexContainer = styled(Flex)`
 	position: relative;
 	z-index: 1;
+	justify-content: space-between;
+`;
+
+const TextsContainer = styled(Flex)`
+	max-width: 580px;
 `;
 
 const MintNowButton = styled(ButtonLink)`
@@ -88,6 +100,10 @@ const CustomImage = styled(Image)`
 	${mediaQueries.laptopS} {
 		display: inline-block;
 	}
+`;
+
+const ColoredD3 = styled(D3)`
+	color: ${brandColors.deep[100]};
 `;
 
 export default SayHelloSection;
