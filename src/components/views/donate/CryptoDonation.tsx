@@ -56,11 +56,6 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-interface IInputBox {
-	error: boolean;
-	focused: boolean;
-}
-
 const CryptoDonation: FC = () => {
 	const { chainId: networkId, account, library, active } = useWeb3React();
 	const dispatch = useAppDispatch();
@@ -474,6 +469,11 @@ const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
 `;
+
+interface IInputBox {
+	error: boolean;
+	focused: boolean;
+}
 
 const SearchContainer = styled.div<IInputBox>`
 	display: flex;
