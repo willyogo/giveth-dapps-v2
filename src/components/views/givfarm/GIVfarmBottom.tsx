@@ -110,11 +110,7 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href={
-								chainId === config.OPTIMISM_NETWORK_NUMBER
-									? 'https://jumper.exchange/?fromChain=100&toChain=10'
-									: 'https://jumper.exchange/?fromChain=1&toChain=100'
-							}
+							href='https://app.shapeshift.com/#/demo/assets/eip155:1/erc20:0x900db999074d9277c5da2a43f252d74366230da0'
 						>
 							{formatMessage({ id: 'label.bridge_your_giv' })}
 						</GLink>
